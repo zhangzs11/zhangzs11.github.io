@@ -1,0 +1,232 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>EAEGameEngineII-03 | Canned Pixels</title><meta name="author" content="Zishuai Zhang,zhangzs2023@163.com"><meta name="copyright" content="Zishuai Zhang"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Download the Game DemoYou can download the demo of the game using the link below. Experience a color-changing animation controlled by spacebar keyboard inputs. Download Game Demo ZIP How to Control th">
+<meta property="og:type" content="article">
+<meta property="og:title" content="EAEGameEngineII-03">
+<meta property="og:url" content="https://zhangzs11.github.io/2024/09/11/GameEngineII-Assignment03Write-Up/index.html">
+<meta property="og:site_name" content="Canned Pixels">
+<meta property="og:description" content="Download the Game DemoYou can download the demo of the game using the link below. Experience a color-changing animation controlled by spacebar keyboard inputs. Download Game Demo ZIP How to Control th">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://zhangzs11.github.io/img/MyAvatar.jpg">
+<meta property="article:published_time" content="2024-09-11T06:00:00.000Z">
+<meta property="article:modified_time" content="2024-12-16T09:47:30.026Z">
+<meta property="article:author" content="Zishuai Zhang">
+<meta property="article:tag" content="Computer Graphics, DirectX, Game Development">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zhangzs11.github.io/img/MyAvatar.jpg"><link rel="shortcut icon" href="/img/MyAvatar.jpg"><link rel="canonical" href="https://zhangzs11.github.io/2024/09/11/GameEngineII-Assignment03Write-Up/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'EAEGameEngineII-03',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/images/Funny/melon2000s.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Canned Pixels</span></a><a class="nav-page-title" href="/"><span class="site-name">EAEGameEngineII-03</span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">EAEGameEngineII-03</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2024-09-11T06:00:00.000Z" title="Created 2024-09-11 00:00:00">2024-09-11</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2024-12-16T09:47:30.026Z" title="Updated 2024-12-16 02:47:30">2024-12-16</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/EAE-Game-Engine-II/">EAE Game Engine II</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h3 id="Download-the-Game-Demo"><a href="#Download-the-Game-Demo" class="headerlink" title="Download the Game Demo"></a>Download the Game Demo</h3><p>You can download the demo of the game using the link below. Experience a color-changing animation controlled by spacebar keyboard inputs.</p>
+<p><a href="/downloads/GameDemo03.zip">Download Game Demo ZIP</a></p>
+<h4 id="How-to-Control-the-Game"><a href="#How-to-Control-the-Game" class="headerlink" title="How to Control the Game"></a>How to Control the Game</h4><ul>
+<li><strong>Spacebar</strong>: Press the spacebar to accelerate the color change animation in the demo.</li>
+</ul>
+<h1 id="Assignment-03-Description"><a href="#Assignment-03-Description" class="headerlink" title="Assignment 03 Description:"></a>Assignment 03 Description:</h1><ul>
+<li><p>Make the graphics interface platform-independent, only using Graphics.cpp to run on both OpenGL and D3D. This means all related graphics classes and methods used must have platform-independent interfaces. </p>
+</li>
+<li><p>Update the Mesh and Effect classes so that users can set up initialization data independently of the platform, rather than hardcoding it. Additionally, only retain the necessary data to minimize the memory of these classes as much as possible. </p>
+</li>
+<li><p>Using the updated interfaces, render two meshes, each bind a different effect.</p>
+</li>
+</ul>
+<div align="center">
+  <img src="/images/GameEngine/03/chang_backGround.png" alt="Game Screenshot">
+  <p>Figure 1. Screenshot of the game running</p>
+</div>
+
+<h1 id="How-to-make-Graphics-cpp-platform-independent"><a href="#How-to-make-Graphics-cpp-platform-independent" class="headerlink" title="How to make Graphics.cpp platform-independent"></a>How to make Graphics.cpp platform-independent</h1><h2 id="Adding-the-cView-Class"><a href="#Adding-the-cView-Class" class="headerlink" title="Adding the cView Class"></a>Adding the cView Class</h2><p>I have created a new <strong>cView</strong> class to manage rendering views, including the depth-stencil view and render target view on the D3D platform. On the OpenGL platform, it is not necessarily required to record views separately, so currently on OpenGL, only a Clear () method for the default view needs to be implemented.</p>
+<div align="center">
+  <img src="/images/GameEngine/03/view_class.png" alt="Game Screenshot">
+  <p>Figure 2. Class cView design</p>
+</div>
+
+<p>By implementing a platform-independent interface through the cView class, the corresponding differences between the Graphics.cpp files for the two platforms have been eliminated.</p>
+<h2 id="Adding-the-Present-Interface-to-the-sContext-Structure"><a href="#Adding-the-Present-Interface-to-the-sContext-Structure" class="headerlink" title="Adding the Present Interface to the sContext Structure"></a>Adding the Present Interface to the sContext Structure</h2><p>Due to the differences in how OpenGL and Direct3D <strong>submit rendering results</strong>, need to add a <strong>Present ()</strong> method to the structure that manages the context. This method will provide an interface for submitting rendering results.</p>
+<h1 id="Clears-the-back-buffer-color"><a href="#Clears-the-back-buffer-color" class="headerlink" title="Clears the back buffer color"></a>Clears the back buffer color</h1><p>An interface is provided through the <strong>class cView</strong>, allowing users to set the color value used for clearing the back buffer.</p>
+<div align="center">
+  <img src="/images/GameEngine/03/clearBuffer_interface.png" alt="Game Screenshot">
+  <p>Figure 3. Code that clears the back buffer color</p>
+</div>
+
+<div align="center">
+  <img src="/images/GameEngine/03/chang_backGround.png" alt="Game Screenshot">
+  <p>Figure 4. Game with a green clear color</p>
+</div>
+
+<h1 id="Initialize-an-effect"><a href="#Initialize-an-effect" class="headerlink" title="Initialize an effect"></a>Initialize an effect</h1><div align="center">
+  <img src="/images/GameEngine/03/code_inti_effect.png" alt="Game Screenshot">
+  <p>Figure 5. Code that initializes an effect</p>
+</div>
+
+<p>Data the user is required to specify：</p>
+<ul>
+<li>The file path of the vertex shader</li>
+<li>The file path of the fragment shader</li>
+<li>renderStateBits</li>
+</ul>
+<h1 id="cEffect-class-design"><a href="#cEffect-class-design" class="headerlink" title="cEffect class design"></a>cEffect class design</h1><p>A single effect takes up <strong>8 bytes in OpenGL platform, takes up 48 bytes in D3D</strong>.</p>
+<div align="center">
+  <img src="/images/GameEngine/03/efffect_class.png" alt="Game Screenshot">
+  <p>Figure 6. Class cEffect</p>
+</div>
+
+<p>For the <strong>D3D</strong> platform, during <strong>Bind()</strong>, the <strong>cShader</strong> needs to execute the <strong>direct3dImmediateContext-&gt;VSSetShader()</strong> function and the <strong>direct3dImmediateContext-&gt;PSSetShader()</strong> function.</p>
+<p>While binding, only the <strong>m_shaderObject</strong> from cShader is needed. I attempted to <strong>retain only the Shader Object</strong> as a member variable of cEffect, as this would occupy less memory than storing the entire cShader. However, if I <strong>release the cShader object, the Shader Object loaded by that object would also become invalid</strong>. Therefore, I think currently have to keep the entire cShader object as a member variable since we need their information during Bind ().</p>
+<p>For the <strong>OpenGL</strong> platform, once a program is created using a shader, the <strong>programId</strong> alone is sufficient to obtain the created shader information. It can be bound directly using programId, <strong>without needing to retain the loaded cShader data</strong>. As a result, the cEffect object’s memory usage is much smaller on the OpenGL platform.</p>
+<p>CRenderState is needed for both platforms during Bind () to <strong>set up the rendering state</strong>.</p>
+<h1 id="Initialize-a-mesh"><a href="#Initialize-a-mesh" class="headerlink" title="Initialize a mesh"></a>Initialize a mesh</h1><div align="center">
+  <img src="/images/GameEngine/03/code_inti_mesh.png" alt="Game Screenshot">
+  <p>Figure 7. Code that initializes a mesh</p>
+</div>
+
+<p>Data the user is required to specify：</p>
+<ul>
+<li>Vertex Data</li>
+<li>Vertex Count</li>
+<li>Index Data</li>
+<li>Index Count</li>
+</ul>
+<h1 id="cMesh-class-design"><a href="#cMesh-class-design" class="headerlink" title="cMesh class design"></a>cMesh class design</h1><p>A single mesh takes up <strong>16 bytes in OpenGL platform, takes up 32 bytes in D3D</strong>.</p>
+<div align="center">
+  <img src="/images/GameEngine/03/mesh_class.png" alt="Game Screenshot">
+  <p>Figure 8. Class cMesh</p>
+</div>
+
+<p>During initialization, the vertex and index data will be uploaded to the GPU buffer, and the space will be allocated for the buffer. On the <strong>D3D</strong> platform, <strong>two ID3D11Buffer pointers</strong> are needed to record the addresses of the required buffers on the GPU, which are used to fetch the buffer data during Draw.</p>
+<p>Similarly, on the <strong>OpenGL</strong> platform, <strong>three GLuint variables</strong> are used to access the <strong>VAO</strong> (Vertex Array Object), <strong>VBO</strong> (Vertex Buffer Object), and <strong>IBO</strong> (Index Buffer Object) created on the GPU.</p>
+<p>When executing Draw on both platforms, <strong>the number of indices</strong> needs to be specified. However, on <strong>D3D</strong>, <strong>the starting index</strong> within the index buffer for drawing also needs to be specified. <strong>To avoid unnecessary memory alignment waste</strong>, this is declared externally.</p>
+<h1 id="Optional-Challenges"><a href="#Optional-Challenges" class="headerlink" title="Optional Challenges"></a>Optional Challenges</h1><p>In <strong>Graphics.cpp</strong>, using <strong>simulation time data</strong> in <strong>s_dataRequiredToRenderAFrame</strong> to set up the clear color. </p>
+<div align="center">
+  <img src="/images/GameEngine/03/Optional.png" alt="Game Screenshot">
+  <p>Figure 9. Set up the clear color using time data</p>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://zhangzs11.github.io">Zishuai Zhang</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://zhangzs11.github.io/2024/09/11/GameEngineII-Assignment03Write-Up/">https://zhangzs11.github.io/2024/09/11/GameEngineII-Assignment03Write-Up/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/img/MyAvatar.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2024/09/14/GameEngineII-Assignment04Write-Up/" title="EAEGameEngineII-04"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">EAEGameEngineII-04</div></div><div class="info-2"><div class="info-item-1">Download the Game DemoYou can download the demo of the game using the link below. Download Game Demo ZIP How to Control the Game Spacebar: Press the spacebar to accelerate the color change animation in the demo. LEFT:     Press the left to remove the right triangle. RIGHT:    Press the right to change the effect of the left triangle.  Assignment 04 Description: Understanding the principles of working with two threads (a rendering thread and a thread for submitting data to the buffer),...</div></div></div></a><a class="pagination-related" href="/2024/09/04/GameEngienII-Assignment02Write-Up/" title="EAEGameEngineII-02"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">EAEGameEngineII-02</div></div><div class="info-2"><div class="info-item-1">Download the Game DemoYou can download the demo of the game using the link below. Experience a color-changing animation controlled by spacebar keyboard inputs. Download Game Demo ZIP How to Control the Game Spacebar: Press the spacebar to accelerate the color change animation in the demo.  Assignment 02 Description: Encapsulate a Mesh class to manage vertex data, and an Effect class to manage shaders and render states. Design and implement platform-independent interfaces for initialization,...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/MyAvatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Zishuai Zhang</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">22</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">4</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/zhangzs11" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:zhangzs2023@163.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Download-the-Game-Demo"><span class="toc-number">1.</span> <span class="toc-text">Download the Game Demo</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#How-to-Control-the-Game"><span class="toc-number">1.1.</span> <span class="toc-text">How to Control the Game</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Assignment-03-Description"><span class="toc-number"></span> <span class="toc-text">Assignment 03 Description:</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#How-to-make-Graphics-cpp-platform-independent"><span class="toc-number"></span> <span class="toc-text">How to make Graphics.cpp platform-independent</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Adding-the-cView-Class"><span class="toc-number"></span> <span class="toc-text">Adding the cView Class</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Adding-the-Present-Interface-to-the-sContext-Structure"><span class="toc-number"></span> <span class="toc-text">Adding the Present Interface to the sContext Structure</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Clears-the-back-buffer-color"><span class="toc-number"></span> <span class="toc-text">Clears the back buffer color</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Initialize-an-effect"><span class="toc-number"></span> <span class="toc-text">Initialize an effect</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#cEffect-class-design"><span class="toc-number"></span> <span class="toc-text">cEffect class design</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Initialize-a-mesh"><span class="toc-number"></span> <span class="toc-text">Initialize a mesh</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#cMesh-class-design"><span class="toc-number"></span> <span class="toc-text">cMesh class design</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Optional-Challenges"><span class="toc-number"></span> <span class="toc-text">Optional Challenges</span></a></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/16/Graphics_System-Shadow/" title="Graphics_System-Shadow Mapping">Graphics_System-Shadow Mapping</a><time datetime="2024-12-16T07:00:00.000Z" title="Created 2024-12-16 00:00:00">2024-12-16</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/02/GameEngineII-FInal%20Project/" title="EAEGameEngineII-Final Game Write-Up">EAEGameEngineII-Final Game Write-Up</a><time datetime="2024-12-02T07:00:00.000Z" title="Created 2024-12-02 00:00:00">2024-12-02</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/11/13/GameEngineII-Final_Project_Proposal/" title="EAEGameEngineII-Final_Project_Proposal">EAEGameEngineII-Final_Project_Proposal</a><time datetime="2024-11-13T07:00:00.000Z" title="Created 2024-11-13 00:00:00">2024-11-13</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/11/12/GameEngine-Graphics_System/" title="GameEngine-Graphics_System">GameEngine-Graphics_System</a><time datetime="2024-11-12T07:00:00.000Z" title="Created 2024-11-12 00:00:00">2024-11-12</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/11/01/Graphics%20Update%20(2)/" title="Engine System Update (2)">Engine System Update (2)</a><time datetime="2024-11-01T06:00:00.000Z" title="Created 2024-11-01 00:00:00">2024-11-01</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2024 By Zishuai Zhang</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

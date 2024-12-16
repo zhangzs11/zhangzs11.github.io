@@ -1,0 +1,224 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Game AI in C++ with openFrameworks - Movement | Canned Pixels</title><meta name="author" content="Zishuai Zhang,zhangzs2023@163.com"><meta name="copyright" content="Zishuai Zhang"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Movement BasicsThe core principle behind movement in game AI is to compute a force that influences an entity’s velocity and position each frame. This force determines how the entity accelerates toward">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Game AI in C++ with openFrameworks - Movement">
+<meta property="og:url" content="https://zhangzs11.github.io/2024/06/29/Game%20AI%20in%20C++%20with%20openFrameworks%20--%20Movement/index.html">
+<meta property="og:site_name" content="Canned Pixels">
+<meta property="og:description" content="Movement BasicsThe core principle behind movement in game AI is to compute a force that influences an entity’s velocity and position each frame. This force determines how the entity accelerates toward">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://zhangzs11.github.io/img/MyAvatar.jpg">
+<meta property="article:published_time" content="2024-06-29T06:00:00.000Z">
+<meta property="article:modified_time" content="2024-12-16T09:48:40.250Z">
+<meta property="article:author" content="Zishuai Zhang">
+<meta property="article:tag" content="Computer Graphics, DirectX, Game Development">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zhangzs11.github.io/img/MyAvatar.jpg"><link rel="shortcut icon" href="/img/MyAvatar.jpg"><link rel="canonical" href="https://zhangzs11.github.io/2024/06/29/Game%20AI%20in%20C++%20with%20openFrameworks%20--%20Movement/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Game AI in C++ with openFrameworks - Movement',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/images/Funny/doc_room_pixel.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Canned Pixels</span></a><a class="nav-page-title" href="/"><span class="site-name">Game AI in C++ with openFrameworks - Movement</span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">Game AI in C++ with openFrameworks - Movement</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2024-06-29T06:00:00.000Z" title="Created 2024-06-29 00:00:00">2024-06-29</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2024-12-16T09:48:40.250Z" title="Updated 2024-12-16 02:48:40">2024-12-16</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Game-AI/">Game AI</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="Movement-Basics"><a href="#Movement-Basics" class="headerlink" title="Movement Basics"></a>Movement Basics</h1><p>The core principle behind movement in game AI is to compute a force that influences an entity’s velocity and position each frame. This force determines how the entity accelerates toward or away from a target.</p>
+<p>The basic process can be broken down into the following steps:</p>
+<ul>
+<li><strong>Compute Force:</strong> Calculate the <strong>force</strong> applied to the entity. Different movements have different way to calculate.</li>
+<li><strong>Update Velocity:</strong> Add the <strong>force</strong> to the current <strong>velocity</strong>, influencing the entity’s speed and direction.<br>$$<br>\vec{v} &#x3D; \vec{v} + \vec{F} \times \Delta t<br>$$</li>
+<li><strong>Update Position:</strong> Update the entity’s <strong>position</strong> based on its <strong>velocity</strong>.<br>$$<br>\vec{p} &#x3D; \vec{p} + \vec{v} \times \Delta t<br>$$</li>
+</ul>
+<h2 id="Capping-Forces-and-Velocities"><a href="#Capping-Forces-and-Velocities" class="headerlink" title="Capping Forces and Velocities"></a>Capping Forces and Velocities</h2><p>To ensure smooth and controlled movement, it’s important to impose limits on both the force and the velocity. This prevents entities from accelerating too quickly or moving faster than desired.</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// calculate the force</span></span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="keyword">if</span> (force.<span class="built_in">length</span>() &gt; maxForce) &#123;</span><br><span class="line">    force.<span class="built_in">scale</span>(maxForce);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// calculate the velocity</span></span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="keyword">if</span> (velocity.<span class="built_in">length</span>() &gt; maxSpeed) &#123;</span><br><span class="line">    velocity.<span class="built_in">scale</span>(maxSpeed);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="Arrive-Movement"><a href="#Arrive-Movement" class="headerlink" title="Arrive Movement"></a>Arrive Movement</h1><p>The Arrive behavior is an essential part of game AI when we want an entity to approach a target in a smooth, controlled manner. Unlike a direct movement approach such as <strong>Seek</strong>, where an entity moves towards a target at full speed, Arrive introduces <strong>deceleration</strong> as the entity nears the target, allowing for smoother and more realistic movement.</p>
+<p>This behavior is particularly useful when the AI-controlled entity needs to <strong>stop precisely at a specific location</strong> without overshooting or abrupt stops.</p>
+<div align="center">
+  <img src="/images/GameAIDemo/arrive.gif" alt="Game Screenshot">
+  <p>Arrive Movement</p>
+</div>
+
+<h2 id="Parameters"><a href="#Parameters" class="headerlink" title="Parameters:"></a>Parameters:</h2><ul>
+<li>ofVec2f <strong>targetPosition</strong>: The position of the target that the entity is moving towards.</li>
+<li>float <strong>slowingRadius</strong>: The distance from the target at which the entity begins to slow down.</li>
+<li>float <strong>stopRadius</strong>: The distance from the target within which the entity comes to a complete stop.</li>
+<li>float <strong>maxSpeed</strong>: The maximum speed the entity can reach when moving towards the target.</li>
+<li>float <strong>maxAcceleration</strong> ; The maximum acceleration the entity can reach when moving towards the target.</li>
+</ul>
+<h2 id="Arrive-Algorithm-Example-Max-Speed-and-Force-Check-Omitted"><a href="#Arrive-Algorithm-Example-Max-Speed-and-Force-Check-Omitted" class="headerlink" title="Arrive Algorithm Example (Max Speed and Force Check Omitted)"></a>Arrive Algorithm Example (Max Speed and Force Check Omitted)</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">float</span> distance = (targetPosition - <span class="keyword">this</span>-&gt;character-&gt;position).<span class="built_in">length</span>();</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (distance &gt; <span class="number">0.0f</span>)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">float</span> targetSpeed;</span><br><span class="line">    <span class="keyword">if</span> (distance &gt; slowingRadius)</span><br><span class="line">    &#123;</span><br><span class="line">        targetSpeed = maxSpeed;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (distance &gt; stopRadius)</span><br><span class="line">    &#123;</span><br><span class="line">        targetSpeed = maxSpeed * (distance - stopRadius) / (slowingRadius - stopRadius);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        targetSpeed = <span class="number">0.0f</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Calculate the desired velocity</span></span><br><span class="line">    ofVec2f desiredVelocity = (targetPosition - <span class="keyword">this</span>-&gt;character-&gt;position) / distance * targetSpeed;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Calculate the force</span></span><br><span class="line">    ofVec2f force = desiredVelocity - <span class="keyword">this</span>-&gt;character-&gt;velocity;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// Max force and Speed check</span></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="Seek-Movement"><a href="#Seek-Movement" class="headerlink" title="Seek Movement"></a>Seek Movement</h1><p>The Seek behavior is one of the simplest and most commonly used movement algorithms in game AI. Its goal is straightforward: to steer the entity directly toward a target position <strong>at maximum speed</strong>. Unlike more advanced behaviors, Seek <strong>doesn’t slow down</strong> as it approaches the target—it simply attempts to reach the target as quickly as possible.</p>
+<div align="center">
+  <img src="/images/GameAIDemo/seek.gif" alt="Game Screenshot">
+  <p>Seek Movement</p>
+</div>
+
+<h2 id="Parameters-1"><a href="#Parameters-1" class="headerlink" title="Parameters:"></a>Parameters:</h2><ul>
+<li>ofVec2f <strong>targetPosition</strong>: The target location that the entity is moving toward.</li>
+<li>float <strong>maxSpeed</strong>: The maximum speed the entity can reach when moving towards the target.</li>
+<li>float <strong>maxAcceleration</strong> ; The maximum acceleration the entity can reach when moving towards the target.</li>
+</ul>
+<h2 id="Seek-Algorithm-Example-Max-Speed-and-Force-Check-Omitted"><a href="#Seek-Algorithm-Example-Max-Speed-and-Force-Check-Omitted" class="headerlink" title="Seek Algorithm Example (Max Speed and Force Check Omitted)"></a>Seek Algorithm Example (Max Speed and Force Check Omitted)</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ofVec2f desiredVelocity = (targetPosition - character-&gt;position).<span class="built_in">getNormalized</span>() * maxSpeed;</span><br><span class="line">ofVec2f force = desiredVelocity - character-&gt;velocity;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Max force and Speed check</span></span><br><span class="line"><span class="comment">// ...</span></span><br></pre></td></tr></table></figure>
+<h1 id="Purse-Movement"><a href="#Purse-Movement" class="headerlink" title="Purse Movement"></a>Purse Movement</h1><p>The Pursue behavior is an <strong>extension of the Seek</strong> algorithm that allows an entity to chase a <strong>moving target</strong> more intelligently. Instead of simply seeking the target’s current position, Pursue <strong>anticipates where the target will be in the future</strong> based on its current velocity and steers the entity toward that predicted position. This results in more effective and realistic pursuit, especially for fast-moving targets.</p>
+<div align="center">
+  <img src="/images/GameAIDemo/pursue.gif" alt="Game Screenshot">
+  <p>Purse Movement</p>
+</div>
+
+<h2 id="Parameters-2"><a href="#Parameters-2" class="headerlink" title="Parameters:"></a>Parameters:</h2><ul>
+<li>Character* <strong>targetCharacter</strong>: The character that the entity is chasing.</li>
+<li>float <strong>maxSpeed</strong>: The maximum speed the entity can reach when pursing the target.</li>
+<li>float <strong>maxAcceleration</strong> ; The maximum acceleration the entity can reach when pursing the target.</li>
+</ul>
+<h2 id="Purse-Algorithm-Example-Max-Speed-and-Force-Check-Omitted"><a href="#Purse-Algorithm-Example-Max-Speed-and-Force-Check-Omitted" class="headerlink" title="Purse Algorithm Example (Max Speed and Force Check Omitted)"></a>Purse Algorithm Example (Max Speed and Force Check Omitted)</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">ofVec2f distance = targetCharacter-&gt;position - purseCharacter-&gt;position;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Calculate update needed (time) to the Target</span></span><br><span class="line"><span class="type">float</span> updatesNeeded = <span class="number">1.0f</span>;</span><br><span class="line"><span class="keyword">if</span> (purseCharacter-&gt;velocity.<span class="built_in">length</span>() != <span class="number">0.0f</span>) &#123;</span><br><span class="line">    updatesNeeded = distance.<span class="built_in">length</span>() / purseCharacter-&gt;velocity.<span class="built_in">length</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Predict the Future Position of the Target</span></span><br><span class="line">ofVec2f futurePosition = targetCharacter-&gt;position + targetCharacter-&gt;velocity * updatesNeeded;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Calculate Steering Force</span></span><br><span class="line">ofVec2f desiredVelocity = (futurePosition - purseCharacter-&gt;position).<span class="built_in">getNormalized</span>() * maxSpeed;</span><br><span class="line">ofVec2f steeringForce = desiredVelocity - purseCharacter-&gt;velocity;</span><br></pre></td></tr></table></figure>
+
+<h1 id="Evade-Movement"><a href="#Evade-Movement" class="headerlink" title="Evade Movement"></a>Evade Movement</h1><p>The Evade behavior is designed to help an entity escape from a potential threat. It’s essentially the inverse of the Pursue behavior. Instead of moving toward a target, the entity anticipates where the threat will be in the future and adjusts its movement to flee from that predicted position.</p>
+<div align="center">
+  <img src="/images/GameAIDemo/evade.gif" alt="Game Screenshot">
+  <p>Evade Movement</p>
+</div>
+
+<h2 id="Parameters-3"><a href="#Parameters-3" class="headerlink" title="Parameters:"></a>Parameters:</h2><ul>
+<li>Character* <strong>targetCharacter</strong>: The character from which the entity is trying to evade.</li>
+<li>float <strong>evadeRadius</strong>: The radius around the entity that defines when it should begin to evade the threat.</li>
+<li>float <strong>maxSpeed</strong>: The maximum speed the entity can reach when evading the target.</li>
+<li>float <strong>maxAcceleration</strong> ; The maximum acceleration the entity can reach when evading the target.</li>
+</ul>
+<h2 id="Evade-Algorithm-Example-Max-Speed-and-Force-Check-Omitted"><a href="#Evade-Algorithm-Example-Max-Speed-and-Force-Check-Omitted" class="headerlink" title="Evade Algorithm Example (Max Speed and Force Check Omitted)"></a>Evade Algorithm Example (Max Speed and Force Check Omitted)</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">ofVec2f distance = targetCharacter-&gt;position - character-&gt;position;</span><br><span class="line"><span class="comment">// If the distance between the entity and the target exceeds the evade radius, the entity does not need to evade.</span></span><br><span class="line"><span class="keyword">if</span> (distance.<span class="built_in">length</span>() &gt; evadeRadius) &#123;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Predict the Future Position of the Threat</span></span><br><span class="line"><span class="type">float</span> updatesNeeded = <span class="number">1.0f</span>;</span><br><span class="line"><span class="keyword">if</span> (targetCharacter-&gt;velocity.<span class="built_in">length</span>() != <span class="number">0.0f</span>) &#123;</span><br><span class="line">    updatesNeeded = distance.<span class="built_in">length</span>() / targetCharacter-&gt;velocity.<span class="built_in">length</span>();</span><br><span class="line">&#125;</span><br><span class="line">ofVec2f futurePosition = targetCharacter-&gt;position + targetCharacter-&gt;velocity * updatesNeeded;</span><br><span class="line"></span><br><span class="line">ofVec2f desiredVelocity = (character-&gt;position - futurePosition).<span class="built_in">getNormalized</span>() * maxSpeed;</span><br><span class="line">ofVec2f steeringForce = desiredVelocity - character-&gt;velocity;</span><br></pre></td></tr></table></figure>
+<h1 id="Flee-Movement"><a href="#Flee-Movement" class="headerlink" title="Flee Movement"></a>Flee Movement</h1><p>The Flee behavior is the inverse of Seek. Instead of moving toward a target, the entity moves away from a perceived threat as quickly as possible. </p>
+<div align="center">
+  <img src="/images/GameAIDemo/flee.gif" alt="Game Screenshot">
+  <p>Flee Movement</p>
+</div>
+
+<h2 id="Parameters-4"><a href="#Parameters-4" class="headerlink" title="Parameters:"></a>Parameters:</h2><ul>
+<li>ofVec2f <strong>threatPosition</strong>: The position of the threat that the entity is fleeing from.</li>
+<li>float <strong>maxSpeed</strong>: The maximum speed the entity can reach when evading the target.</li>
+<li>float <strong>maxAcceleration</strong> ; The maximum acceleration the entity can reach when evading the target.</li>
+</ul>
+<h2 id="Flee-Algorithm-Example-Max-Speed-and-Force-Check-Omitted"><a href="#Flee-Algorithm-Example-Max-Speed-and-Force-Check-Omitted" class="headerlink" title="Flee Algorithm Example (Max Speed and Force Check Omitted)"></a>Flee Algorithm Example (Max Speed and Force Check Omitted)</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ofVec2f desiredVelocity = (character-&gt;position - threatPosition).<span class="built_in">getNormalized</span>() * maxSpeed;</span><br><span class="line"></span><br><span class="line">ofVec2f steeringForce = desiredVelocity - character-&gt;velocity;</span><br></pre></td></tr></table></figure></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://zhangzs11.github.io">Zishuai Zhang</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://zhangzs11.github.io/2024/06/29/Game%20AI%20in%20C++%20with%20openFrameworks%20--%20Movement/">https://zhangzs11.github.io/2024/06/29/Game%20AI%20in%20C++%20with%20openFrameworks%20--%20Movement/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/img/MyAvatar.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2024/07/10/Game%20AI%20in%20C++%20with%20openFrameworks%20-%20Pathfinding/" title="Game AI in C++ with openFrameworks - Pathfinding"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">Game AI in C++ with openFrameworks - Pathfinding</div></div><div class="info-2"><div class="info-item-1">Pathfinding AlgorithmsPathfinding algorithms are essential for navigating game environments, and the key differences between these algorithms lies in how they prioritize which nodes to explore first. This prioritization is typically managed through a frontier set or queue, where nodes are sorted based on different criteria. Dijkstra’s AlgorithmPrioritization:Dijkstra’s Algorithm prioritizes nodes solely based on the cost from the start node to the current node (g(n)). It expands nodes with...</div></div></div></a><a class="pagination-related" href="/2006/01/05/ZYStory01/" title="张野的故事（一）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">张野的故事（一）</div></div><div class="info-2"><div class="info-item-1">第一话 新港小学时间回到2006年，在一个平淡的一天，张野踏入了新港小学的大门。这是他学前班的第一天，父母送他来到了教室，教室里都是哭闹的学前班小孩儿，叽叽喳喳，场面十分混乱。但是张野面无表情，轻蔑一笑的对来送他的父母说，你们回去吧。父母则露出了笑容，挥挥手和张野说了再见。张野找了一个第二排靠窗的空座位，旁边是一个抽泣的小女孩。“我能坐这吗？”张野不屑的问道。小女孩自顾自的抽泣，并没有搭理张野。“我他妈的问你话呢，哑巴了？”说罢一个大嘴巴子就抽了过去。小女孩先是一脸震惊，后来突然由抽泣变成了大哭。“哇！～～我要回家！”老师见状急忙过来安慰，周围的小同学也好奇的凑了过来，忘记了自己刚刚也是在哭着要回家。大家纷纷过来安慰。这个小女孩由于被一巴掌打怕了，当然没说刚才发生了什么，只是支支吾吾搪塞道 “没事老师，我吃辣条辣到了～” 老师见状也没多问，和周围同学一起其乐融融的安慰小女孩，气氛也逐渐欢乐了起来，老师顺势也让同 学们回到座位，开始了开学介绍。“小朋友们～大家好，我是你们的班主任，我叫王鲍， 你们可以叫我王老师！”...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/MyAvatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Zishuai Zhang</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">22</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">4</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/zhangzs11" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:zhangzs2023@163.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Movement-Basics"><span class="toc-number">1.</span> <span class="toc-text">Movement Basics</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Capping-Forces-and-Velocities"><span class="toc-number">1.1.</span> <span class="toc-text">Capping Forces and Velocities</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Arrive-Movement"><span class="toc-number">2.</span> <span class="toc-text">Arrive Movement</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Parameters"><span class="toc-number">2.1.</span> <span class="toc-text">Parameters:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Arrive-Algorithm-Example-Max-Speed-and-Force-Check-Omitted"><span class="toc-number">2.2.</span> <span class="toc-text">Arrive Algorithm Example (Max Speed and Force Check Omitted)</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Seek-Movement"><span class="toc-number">3.</span> <span class="toc-text">Seek Movement</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Parameters-1"><span class="toc-number">3.1.</span> <span class="toc-text">Parameters:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Seek-Algorithm-Example-Max-Speed-and-Force-Check-Omitted"><span class="toc-number">3.2.</span> <span class="toc-text">Seek Algorithm Example (Max Speed and Force Check Omitted)</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Purse-Movement"><span class="toc-number">4.</span> <span class="toc-text">Purse Movement</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Parameters-2"><span class="toc-number">4.1.</span> <span class="toc-text">Parameters:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Purse-Algorithm-Example-Max-Speed-and-Force-Check-Omitted"><span class="toc-number">4.2.</span> <span class="toc-text">Purse Algorithm Example (Max Speed and Force Check Omitted)</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Evade-Movement"><span class="toc-number">5.</span> <span class="toc-text">Evade Movement</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Parameters-3"><span class="toc-number">5.1.</span> <span class="toc-text">Parameters:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Evade-Algorithm-Example-Max-Speed-and-Force-Check-Omitted"><span class="toc-number">5.2.</span> <span class="toc-text">Evade Algorithm Example (Max Speed and Force Check Omitted)</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Flee-Movement"><span class="toc-number">6.</span> <span class="toc-text">Flee Movement</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Parameters-4"><span class="toc-number">6.1.</span> <span class="toc-text">Parameters:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Flee-Algorithm-Example-Max-Speed-and-Force-Check-Omitted"><span class="toc-number">6.2.</span> <span class="toc-text">Flee Algorithm Example (Max Speed and Force Check Omitted)</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/16/Graphics_System-Shadow/" title="Graphics_System-Shadow Mapping">Graphics_System-Shadow Mapping</a><time datetime="2024-12-16T07:00:00.000Z" title="Created 2024-12-16 00:00:00">2024-12-16</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/02/GameEngineII-FInal%20Project/" title="EAEGameEngineII-Final Game Write-Up">EAEGameEngineII-Final Game Write-Up</a><time datetime="2024-12-02T07:00:00.000Z" title="Created 2024-12-02 00:00:00">2024-12-02</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/11/13/GameEngineII-Final_Project_Proposal/" title="EAEGameEngineII-Final_Project_Proposal">EAEGameEngineII-Final_Project_Proposal</a><time datetime="2024-11-13T07:00:00.000Z" title="Created 2024-11-13 00:00:00">2024-11-13</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/11/12/GameEngine-Graphics_System/" title="GameEngine-Graphics_System">GameEngine-Graphics_System</a><time datetime="2024-11-12T07:00:00.000Z" title="Created 2024-11-12 00:00:00">2024-11-12</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/11/01/Graphics%20Update%20(2)/" title="Engine System Update (2)">Engine System Update (2)</a><time datetime="2024-11-01T06:00:00.000Z" title="Created 2024-11-01 00:00:00">2024-11-01</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2024 By Zishuai Zhang</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
