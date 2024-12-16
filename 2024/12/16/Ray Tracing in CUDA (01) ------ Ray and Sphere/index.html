@@ -1,0 +1,207 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Ray Tracing in CUDA (01) - Ray and Sphere | Canned Pixels</title><meta name="author" content="Zishuai Zhang,zhangzs2023@163.com"><meta name="copyright" content="Zishuai Zhang"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Ray ClassAt the core of the ray tracer is to send rays through pixels and compute what color is seen in the direction of those rays. class code123456789101112class ray&#123;public:__device__ ray() &amp;#1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ray Tracing in CUDA (01) - Ray and Sphere">
+<meta property="og:url" content="https://zhangzs11.github.io/2024/12/16/Ray%20Tracing%20in%20CUDA%20(01)%20------%20Ray%20and%20Sphere/index.html">
+<meta property="og:site_name" content="Canned Pixels">
+<meta property="og:description" content="Ray ClassAt the core of the ray tracer is to send rays through pixels and compute what color is seen in the direction of those rays. class code123456789101112class ray&#123;public:__device__ ray() &amp;#1">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://zhangzs11.github.io/img/butterfly-icon.png">
+<meta property="article:published_time" content="2024-12-16T08:48:58.696Z">
+<meta property="article:modified_time" content="2024-10-12T04:08:00.174Z">
+<meta property="article:author" content="Zishuai Zhang">
+<meta property="article:tag" content="Computer Graphics, DirectX, Game Development">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zhangzs11.github.io/img/butterfly-icon.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://zhangzs11.github.io/2024/12/16/Ray%20Tracing%20in%20CUDA%20(01)%20------%20Ray%20and%20Sphere/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Ray Tracing in CUDA (01) - Ray and Sphere',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/images/RayTracing/RT10greenLine.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Canned Pixels</span></a><a class="nav-page-title" href="/"><span class="site-name">Ray Tracing in CUDA (01) - Ray and Sphere</span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">Ray Tracing in CUDA (01) - Ray and Sphere</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2024-12-16T08:48:58.696Z" title="Created 2024-12-16 01:48:58">2024-12-16</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2024-10-12T04:08:00.174Z" title="Updated 2024-10-11 22:08:00">2024-10-11</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Ray-Tracing/">Ray Tracing</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="Ray-Class"><a href="#Ray-Class" class="headerlink" title="Ray Class"></a>Ray Class</h1><p>At the core of the ray tracer is to <strong>send rays through pixels</strong> and compute <strong>what color is seen in the direction of those rays</strong>.</p>
+<h2 id="class-code"><a href="#class-code" class="headerlink" title="class code"></a>class code</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">ray</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"><span class="function">__device__ <span class="title">ray</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line"><span class="function">__device__ <span class="title">ray</span><span class="params">(<span class="type">const</span> vec3&amp; a, <span class="type">const</span> vec3&amp; b)</span> </span>&#123; A = a; B = b; &#125;</span><br><span class="line"><span class="function">__device__ vec3 <span class="title">origin</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> A; &#125;</span><br><span class="line"><span class="function">__device__ vec3 <span class="title">direction</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> B; &#125;</span><br><span class="line"><span class="function">__device__ vec3 <span class="title">point_at_parameter</span><span class="params">(<span class="type">float</span> t)</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> A + t * B; &#125;</span><br><span class="line"></span><br><span class="line">	vec3 A;</span><br><span class="line">	vec3 B;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p><strong><em>Member variable:</em></strong></p>
+<ul>
+<li>A is a Vector3, represents the origin point of the ray.</li>
+<li>B is also a Vector3, represents the direction of the ray.</li>
+</ul>
+<p><strong><em>Function:</em></strong></p>
+<ul>
+<li><strong><em>point_at_parameter(float t)</em></strong></li>
+</ul>
+<p>This function computes the point $ P(t) $ on the parametric equation of a line when the parameter is t, where</p>
+<p>$$<br>P(t) &#x3D; A + t \times B<br>$$</p>
+<p>It’s used for calculating the intersection point <strong><em>(hit point)</em></strong> between a ray and an object during ray-object intersection testing.</p>
+<h1 id="Sphere-Class"><a href="#Sphere-Class" class="headerlink" title="Sphere Class"></a>Sphere Class</h1><p>We are currently using spheres as hit objects because the intersection test is relatively simple, and the geometric representation is straight, which makes it easier to test the results. In the future, I plan to add more complex geometric representations, such as triangles, which are more commonly used.</p>
+<h2 id="class-code-1"><a href="#class-code-1" class="headerlink" title="class code"></a>class code</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">sphere</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">__device__ <span class="title">sphere</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line">    <span class="function">__device__ <span class="title">sphere</span><span class="params">(vec3 cen, <span class="type">float</span> r, material* m)</span> : center(cen), radius(r), mat_ptr(m) &#123;</span>&#125;;</span><br><span class="line">    <span class="function">__device__ <span class="type">bool</span> <span class="title">hit</span><span class="params">(<span class="type">const</span> ray&amp; r, <span class="type">float</span> tmin, <span class="type">float</span> tmax, hit_record&amp; rec)</span> <span class="type">const</span></span>;</span><br><span class="line">    vec3 center;</span><br><span class="line">    <span class="type">float</span> radius;</span><br><span class="line">    material* mat_ptr;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p><strong><em>Hit Sphere Function:</em></strong></p>
+<ul>
+<li><strong><em>bool hit(const ray&amp; r, float tmin, float tmax, hit_record&amp; rec)</em></strong></li>
+</ul>
+<p>The equation of a sphere in vector form is:</p>
+<p>$$<br>\text{Dot}((\mathbf{p} - \mathbf{c}), (\mathbf{p} - \mathbf{c})) &#x3D; R^2<br>$$</p>
+<p>Where:</p>
+<ul>
+<li>$ \mathbf{p} $ is a point on the sphere,</li>
+<li>$ \mathbf{c} $ is the center of the sphere, and</li>
+<li>$ R $ is the radius of the sphere.</li>
+</ul>
+<p>If a ray hits the sphere, there is some $ t $ for which $ \mathbf{p}(t) $ satisfies the sphere equation. This leads us to the following equation for any $ t $:</p>
+<p>$$<br>\text{Dot}((\mathbf{P}(t) - \mathbf{c}), (\mathbf{P}(t) - \mathbf{c})) &#x3D; R^2<br>$$</p>
+<p>Expanding this equation and rearranging the terms, we get the following quadratic form:</p>
+<p>$$<br>t^2 \cdot \text{Dot}(\mathbf{B}, \mathbf{B}) + 2t \cdot \text{Dot}(\mathbf{B}, \mathbf{A} - \mathbf{C}) + \text{Dot}(\mathbf{A} - \mathbf{C}, \mathbf{A} - \mathbf{C}) - R^2 &#x3D; 0<br>$$</p>
+<p>(Since the dot product obeys the distributive and commutative properties.)</p>
+<p>Here, the unknown is $ t $, and the equation is <strong>quadratic</strong>. We can solve for $ t $, and the part <strong>involving the square root will determine how many real solutions exist</strong>, indicating whether the ray <strong>hits</strong> the sphere and <strong>how many intersection points</strong> there are.</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">__device__ <span class="type">bool</span> <span class="title">sphere::hit</span><span class="params">(<span class="type">const</span> ray&amp; r, <span class="type">float</span> t_min, <span class="type">float</span> t_max, hit_record&amp; rec)</span> <span class="type">const</span> </span>&#123;</span><br><span class="line">    vec3 oc = r.<span class="built_in">origin</span>() - center;</span><br><span class="line">    <span class="type">float</span> a = <span class="built_in">dot</span>(r.<span class="built_in">direction</span>(), r.<span class="built_in">direction</span>());</span><br><span class="line">    <span class="type">float</span> b = <span class="built_in">dot</span>(oc, r.<span class="built_in">direction</span>());</span><br><span class="line">    <span class="type">float</span> c = <span class="built_in">dot</span>(oc, oc) - radius * radius;</span><br><span class="line">    <span class="type">float</span> discriminant = b * b - a * c;</span><br><span class="line">    <span class="keyword">if</span> (discriminant &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="type">float</span> temp = (-b - <span class="built_in">sqrt</span>(discriminant)) / a;</span><br><span class="line">        <span class="keyword">if</span> (temp &lt; t_max &amp;&amp; temp &gt; t_min) &#123;</span><br><span class="line">            rec.t = temp;</span><br><span class="line">            rec.p = r.<span class="built_in">point_at_parameter</span>(rec.t);</span><br><span class="line">            rec.normal = (rec.p - center) / radius;</span><br><span class="line">            rec.mat_ptr = mat_ptr;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        temp = (-b + <span class="built_in">sqrt</span>(discriminant)) / a;</span><br><span class="line">        <span class="keyword">if</span> (temp &lt; t_max &amp;&amp; temp &gt; t_min) &#123;</span><br><span class="line">            rec.t = temp;</span><br><span class="line">            rec.p = r.<span class="built_in">point_at_parameter</span>(rec.t);</span><br><span class="line">            rec.normal = (rec.p - center) / radius;</span><br><span class="line">            rec.mat_ptr = mat_ptr;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="Multiple-Hittable-Objects-Design"><a href="#Multiple-Hittable-Objects-Design" class="headerlink" title="Multiple Hittable Objects Design"></a>Multiple Hittable Objects Design</h1><p>When designing a ray tracing system that involves multiple spheres, it might seem tempting to use an array of spheres to represent all the objects that a ray might hit. However, this approach is not flexible enough as we may want to add more types of objects in the future, such as triangles or other shapes. To make the system more extensible and clean, a better solution is to define an <strong>abstract class</strong> for any object that a ray might hit. We’ll call this abstract class <strong>Hittable</strong>.</p>
+<h2 id="Hittable-Class"><a href="#Hittable-Class" class="headerlink" title="Hittable Class"></a>Hittable Class</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">hitable</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">__device__ <span class="keyword">virtual</span> <span class="type">bool</span> <span class="title">hit</span><span class="params">(<span class="type">const</span> ray&amp; r, <span class="type">float</span> t_min, <span class="type">float</span> t_max, hit_record&amp; rec)</span> <span class="type">const</span> </span>= <span class="number">0</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>The <strong>Hittable</strong> class defines a virtual <strong>hit</strong> function that will be implemented by any object capable of being hit by a ray. This function takes in a ray and an interval defined by <strong>tmin</strong> and <strong>tmax</strong> (which bounds the acceptable range for ray-parameter <strong>t</strong>), and calculates a <strong>hit_record</strong> to store information about the intersection if it occurs.</p>
+<h2 id="hit-record-Structure"><a href="#hit-record-Structure" class="headerlink" title="hit_record Structure"></a>hit_record Structure</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">hit_record</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">float</span> t;</span><br><span class="line">	vec3 p;</span><br><span class="line">	vec3 normal;</span><br><span class="line">	material* mat_ptr;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>The <strong>hit_record</strong> structure contains important details about the hit, such as:</p>
+<ul>
+<li>The <strong>normal</strong> at the point of intersection (which is currently computed in a simplified way that works well for closed spheres).</li>
+<li>The <strong>position</strong> of the hit point.</li>
+<li>The <strong>t value</strong> corresponding to the ray parameter where the intersection occurs.</li>
+<li>The <strong>material</strong> of the hit object.</li>
+</ul>
+<h2 id="Sphere-Class-inherits"><a href="#Sphere-Class-inherits" class="headerlink" title="Sphere Class inherits"></a>Sphere Class inherits</h2><p>The <strong>Sphere</strong> class inherits from <strong>Hittable</strong> and implements the <strong>hit</strong> function specifically for spheres. This function checks whether a ray intersects with a sphere by solving the quadratic equation derived from the sphere’s geometric equation.</p>
+<p>Each sphere has its own <strong>center</strong> and <strong>radius</strong>, which are used in the hit function to determine if the ray intersects the sphere.</p>
+<h2 id="Hittable-List-Class"><a href="#Hittable-List-Class" class="headerlink" title="Hittable List Class"></a>Hittable List Class</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">hitable_list</span> : <span class="keyword">public</span> hitable &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">__device__ <span class="title">hitable_list</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line">    <span class="function">__device__ <span class="title">hitable_list</span><span class="params">(hitable** l, <span class="type">int</span> n)</span> </span>&#123; list = l; list_size = n; &#125;</span><br><span class="line">    <span class="function">__device__ <span class="keyword">virtual</span> <span class="type">bool</span> <span class="title">hit</span><span class="params">(<span class="type">const</span> ray&amp; r, <span class="type">float</span> tmin, <span class="type">float</span> tmax, hit_record&amp; rec)</span> <span class="type">const</span></span>;</span><br><span class="line">    hitable** list;</span><br><span class="line">    <span class="type">int</span> list_size;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>The <strong>Hittable_list</strong> class holds a list of objects that are of type <strong>Hittable</strong>. It implements its own <strong>hit</strong> function that loops through all the objects in the list, checking for intersections with each one. If a hit is detected, the function updates the hit record accordingly.</p>
+<p>The <strong>Hittable_list</strong> class maintains a pointer to an array of <strong>Hittable</strong> objects (<strong>hittable** list</strong>), and the size of the list is stored in <strong>list_size</strong>.</p>
+<p>By structuring the ray-object interaction this way, we can easily extend the system to include more types of objects, not just spheres, without needing to modify the core <strong>Hittable</strong> interface. This makes the design more flexible and maintainable, especially as more complex scenes and geometries are introduced.</p>
+<p><strong><em>Hit Function:</em></strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">__device__ <span class="type">bool</span> <span class="title">hitable_list::hit</span><span class="params">(<span class="type">const</span> ray&amp; r, <span class="type">float</span> t_min, <span class="type">float</span> t_max, hit_record&amp; rec)</span> <span class="type">const</span> </span>&#123;</span><br><span class="line">	hit_record temp_rec;</span><br><span class="line">	<span class="type">bool</span> hit_anything = <span class="literal">false</span>;</span><br><span class="line">	<span class="type">float</span> closest_so_far = t_max;</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; list_size; i++) &#123;</span><br><span class="line">		<span class="keyword">if</span> (list[i]-&gt;<span class="built_in">hit</span>(r, t_min, closest_so_far, temp_rec)) &#123;</span><br><span class="line">			hit_anything = <span class="literal">true</span>;</span><br><span class="line">			closest_so_far = temp_rec.t;</span><br><span class="line">			rec = temp_rec;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> hit_anything;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://zhangzs11.github.io">Zishuai Zhang</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://zhangzs11.github.io/2024/12/16/Ray%20Tracing%20in%20CUDA%20(01)%20------%20Ray%20and%20Sphere/">https://zhangzs11.github.io/2024/12/16/Ray%20Tracing%20in%20CUDA%20(01)%20------%20Ray%20and%20Sphere/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/img/butterfly-icon.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2024/12/16/Ray%20Tracing%20in%20CUDA%20(02)%20-----%20Three%20Materials/" title="Ray Tracing in CUDA (02) - Three Materials"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">Ray Tracing in CUDA (02) - Three Materials</div></div><div class="info-2"><div class="info-item-1">Weighting Material Design ChoicesOne design approach is to separate shapes (e.g., spheres, triangle) from materials (e.g., diffuse, metal), rather than combining geometry and material information into a single object. This separation allows for more flexibility when assigning different materials to the same shape or using the same material across various shapes. Alternatively, we could design a universal material with a variety of parameters, and different material types would simply zero...</div></div></div></a><a class="pagination-related" href="/2024/12/16/Graphics_System-Shadow/" title="Graphics_System-Shadow Mapping"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">Graphics_System-Shadow Mapping</div></div><div class="info-2"><div class="info-item-1">Shadow mapShadow mapping is a widely used technique in real-time rendering to produce realistic shadows. The process involves placing a camera at the light’s position and rendering the scene from the light’s perspective before the main rendering pass. This pre-rendered depth information, stored in a depth buffer, is called the shadow map.       A shadow map   Percentage-Closer Filtering (PCF)When sampling the shadow map using projected texture coordinates, it’s common for the sampling point...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Zishuai Zhang</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">22</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">4</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Ray-Class"><span class="toc-number">1.</span> <span class="toc-text">Ray Class</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#class-code"><span class="toc-number">1.1.</span> <span class="toc-text">class code</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Sphere-Class"><span class="toc-number">2.</span> <span class="toc-text">Sphere Class</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#class-code-1"><span class="toc-number">2.1.</span> <span class="toc-text">class code</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Multiple-Hittable-Objects-Design"><span class="toc-number">3.</span> <span class="toc-text">Multiple Hittable Objects Design</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Hittable-Class"><span class="toc-number">3.1.</span> <span class="toc-text">Hittable Class</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#hit-record-Structure"><span class="toc-number">3.2.</span> <span class="toc-text">hit_record Structure</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Sphere-Class-inherits"><span class="toc-number">3.3.</span> <span class="toc-text">Sphere Class inherits</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Hittable-List-Class"><span class="toc-number">3.4.</span> <span class="toc-text">Hittable List Class</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/16/ZYStory01/" title="张野的故事（一）">张野的故事（一）</a><time datetime="2024-12-16T08:48:58.701Z" title="Created 2024-12-16 01:48:58">2024-12-16</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/16/Ray%20Tracing%20in%20CUDA%20(03)%20-----%20Camera%20and%20Defocus%20Bulr/" title="Ray Tracing in CUDA (03) - Camera and Defocus Blur">Ray Tracing in CUDA (03) - Camera and Defocus Blur</a><time datetime="2024-12-16T08:48:58.700Z" title="Created 2024-12-16 01:48:58">2024-12-16</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/16/Ray%20Tracing%20in%20CUDA%20(02)%20-----%20Three%20Materials/" title="Ray Tracing in CUDA (02) - Three Materials">Ray Tracing in CUDA (02) - Three Materials</a><time datetime="2024-12-16T08:48:58.697Z" title="Created 2024-12-16 01:48:58">2024-12-16</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/16/Ray%20Tracing%20in%20CUDA%20(01)%20------%20Ray%20and%20Sphere/" title="Ray Tracing in CUDA (01) - Ray and Sphere">Ray Tracing in CUDA (01) - Ray and Sphere</a><time datetime="2024-12-16T08:48:58.696Z" title="Created 2024-12-16 01:48:58">2024-12-16</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/16/Graphics_System-Shadow/" title="Graphics_System-Shadow Mapping">Graphics_System-Shadow Mapping</a><time datetime="2024-12-16T08:48:58.693Z" title="Created 2024-12-16 01:48:58">2024-12-16</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2024 By Zishuai Zhang</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
