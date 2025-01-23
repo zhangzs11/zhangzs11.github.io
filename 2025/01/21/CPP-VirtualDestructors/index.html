@@ -1,0 +1,203 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>CPP-Virtual Destructors | Canned Pixels</title><meta name="author" content="Zishuai Zhang,zhangzs2023@163.com"><meta name="copyright" content="Zishuai Zhang"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Virtual DestructorsIf we have a base class pointer that is pointing to a drive class object instance on the heap, unless we have create the base class destructor using the virtual keyword, we’re at ri">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CPP-Virtual Destructors">
+<meta property="og:url" content="https://zhangzs11.github.io/2025/01/21/CPP-VirtualDestructors/index.html">
+<meta property="og:site_name" content="Canned Pixels">
+<meta property="og:description" content="Virtual DestructorsIf we have a base class pointer that is pointing to a drive class object instance on the heap, unless we have create the base class destructor using the virtual keyword, we’re at ri">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://zhangzs11.github.io/img/MyAvatar.jpg">
+<meta property="article:published_time" content="2025-01-21T16:04:10.615Z">
+<meta property="article:modified_time" content="2025-01-22T05:32:01.318Z">
+<meta property="article:author" content="Zishuai Zhang">
+<meta property="article:tag" content="Computer Graphics, D3D, Game Engine Development">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zhangzs11.github.io/img/MyAvatar.jpg"><link rel="shortcut icon" href="/img/MyAvatar.jpg"><link rel="canonical" href="https://zhangzs11.github.io/2025/01/21/CPP-VirtualDestructors/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'CPP-Virtual Destructors',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background: linear-gradient(20deg, #b9fbc0, #98f5e1, #90dbf4, #cfbaf0);"></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/images/Funny/doc_room_pixel.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Canned Pixels</span></a><a class="nav-page-title" href="/"><span class="site-name">CPP-Virtual Destructors</span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">CPP-Virtual Destructors<a class="post-edit-link" href="null_posts/CPP-VirtualDestructors.md" title="Edit" target="_blank"><i class="fas fa-pencil-alt"></i></a></h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2025-01-21T16:04:10.615Z" title="Created 2025-01-21 09:04:10">2025-01-21</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2025-01-22T05:32:01.318Z" title="Updated 2025-01-21 22:32:01">2025-01-21</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Game-AI/">Game AI</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="Virtual-Destructors"><a href="#Virtual-Destructors" class="headerlink" title="Virtual Destructors"></a>Virtual Destructors</h1><p>If we have a base class pointer that is pointing to a drive class object instance on the heap, unless we have create the base class destructor using the virtual keyword, we’re at risk of having a memory leak occur when we delete the object</p>
+<p>Base Class<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">BaseData</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">int</span> *data</span></span><br><span class="line"><span class="function">    </span></span><br><span class="line"><span class="function">    <span class="title">BaseData</span><span class="params">(<span class="type">int</span> size)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        data = <span class="keyword">new</span> <span class="type">int</span>[size];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    ~<span class="built_in">BaseData</span>()</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;BaseData destructor is running&quot;</span> &lt;&lt; endl;</span><br><span class="line">        <span class="keyword">delete</span> data;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>Derived Class<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">DerivedData</span> : <span class="keyword">public</span> BaseData</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">int</span> *extra_data</span></span><br><span class="line"><span class="function">    </span></span><br><span class="line"><span class="function">    <span class="title">DerivedData</span><span class="params">(<span class="type">int</span> size, <span class="type">int</span> extra_size)</span> : BaseData(size)</span></span><br><span class="line"><span class="function">    &#123;</span></span><br><span class="line">        extra_data = <span class="keyword">new</span> <span class="type">int</span>[extra_size];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    ~<span class="built_in">DerivedData</span>()</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;DerivedData destructor is running&quot;</span> &lt;&lt; endl;</span><br><span class="line">        <span class="keyword">delete</span> extra_data;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure><br>We expect the base class destructor to also be called when a derived class object is destroyed</p>
+<p>Try<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">BaseData *base = <span class="keyword">new</span> <span class="built_in">BaseData</span>(<span class="number">10</span>);</span><br><span class="line"><span class="keyword">delete</span> base;</span><br></pre></td></tr></table></figure><br>Output:<br>BaseData destructor is running  (make sense!)</p>
+<p>Try<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">DerivedData *derived = <span class="keyword">new</span> <span class="built_in">DerivedData</span>(<span class="number">10</span>, <span class="number">10</span>);</span><br><span class="line"><span class="keyword">delete</span> derived;</span><br></pre></td></tr></table></figure><br>Output:<br>DerivedData destructor is running<br>BaseData destructor is running  (make sense!)</p>
+<p>Problem Come!<br>When base class pointers to derived class object instances, when we try to delete those derived class objects using the base class pointer, we are going to find that only the base class destructor is going to run. ANd we will have a memory leak. </p>
+<p>Example:<br>We are taking advantage of polymorphism where we don’t care what type of object is, we know that it has this member function we can call.<br>Try<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">BaseData *array[] = </span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">new</span> <span class="built_in">BaseData</span> (<span class="number">5</span>)，</span><br><span class="line">    <span class="keyword">new</span> <span class="built_in">DeriveData</span> (<span class="number">4</span>, <span class="number">4</span>)</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// do some work</span></span><br><span class="line"><span class="comment">// for (int i=0; i&lt;2; i++) array[i].method();</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i=<span class="number">0</span>; i&lt;<span class="number">2</span>; i++)</span><br><span class="line">    <span class="keyword">delete</span> array[i];</span><br></pre></td></tr></table></figure><br>Output:<br>BaseData destructor is running (this make sence, first element in array)<br>BaseData destructor is running (this is not!)</p>
+<p>Problem:<br>Static binding<br>We have an array of base data type pointers, when we say delete array at index i, static binding is occurring, only the base data destructor is going to run. What we need to dynamic binding, such that at run time as opposed to at compile time, it is determined which destructor to call<br>So change<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">BaseData</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">int</span> *data</span></span><br><span class="line"><span class="function">    </span></span><br><span class="line"><span class="function">    <span class="title">BaseData</span><span class="params">(<span class="type">int</span> size)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        data = <span class="keyword">new</span> <span class="type">int</span>[size];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">virtual</span> ~<span class="built_in">BaseData</span>()</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;BaseData destructor is running&quot;</span> &lt;&lt; endl;</span><br><span class="line">        <span class="keyword">delete</span> data;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>right now<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i=<span class="number">0</span>; i&lt;<span class="number">2</span>; i++)</span><br><span class="line">    <span class="keyword">delete</span> array[i];</span><br></pre></td></tr></table></figure><br>This will make it so that the call here to delete is now dynamic, the decision as to which destructor to run is now going to be made at runtime. As our program is executing depending on the type of the object.<br>Try Again!<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">BaseData *array[] = </span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">new</span> <span class="built_in">BaseData</span> (<span class="number">5</span>)，</span><br><span class="line">    <span class="keyword">new</span> <span class="built_in">DeriveData</span> (<span class="number">4</span>, <span class="number">4</span>)</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// do some work</span></span><br><span class="line"><span class="comment">// for (int i=0; i&lt;2; i++) array[i].method();</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i=<span class="number">0</span>; i&lt;<span class="number">2</span>; i++)</span><br><span class="line">    <span class="keyword">delete</span> array[i];</span><br></pre></td></tr></table></figure><br>Output: (we expect!)<br>BaseData destructor is running (1st element)<br>DerivedData destructor is running (2nd element)<br>BaseData destructor is running (2nd element)</p>
+<p>If the derived data destructor then this dynamically allocated memory is never going to be freed via the destructor running, the bug called the memory leak.<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">DerivedData</span>(<span class="type">int</span> size, <span class="type">int</span> extra_size) : <span class="built_in">BaseData</span>(size)</span><br><span class="line">&#123;</span><br><span class="line">extra_data = <span class="keyword">new</span> <span class="type">int</span>[extra_size];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h1><p>When we are defining a class , if there is a possibility of another class inheriting from that class. It is very important that we use the virtual keyword when defining the destructor for that class.</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://zhangzs11.github.io">Zishuai Zhang</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://zhangzs11.github.io/2025/01/21/CPP-VirtualDestructors/">https://zhangzs11.github.io/2025/01/21/CPP-VirtualDestructors/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/img/MyAvatar.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/01/21/CPP-stackVSheap/" title="CPP-stack VS heap"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">CPP-stack VS heap</div></div><div class="info-2"><div class="info-item-1">Four segments of MemoryCode (Text)assigned to store instructions that need to be executed. Static/Globalstores all the static or global variables, variables that are nor declared inside a function, and that have the whole lifetime of an application, they are accessible anywhere as long as the application is running. Stackis used to store all the information of function calls amd all the local variables  When our program starts, our operating system allocates some amount of reserved space,...</div></div></div></a><a class="pagination-related" href="/2025/01/20/GraphicsSystem-DeferredRendering/" title="GraphicsSystem-Deferred Rendering"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">GraphicsSystem-Deferred Rendering</div></div><div class="info-2"><div class="info-item-1">Deferred Rendering: G-Buffer ConstructionThe first stage of deferred rendering involves constructing the G-Buffer, which stores essential pre-pixel data like normals, albedo, position, and specular properties. Vertex Shader12345678910111213141516171819202122void main(    in const float3 i_vertexPosition_local : POSITION,    in const float2 i_vertexUV : TEXCOORD0,    in const float3 i_vertexNormal : NORMAL,        out float4 o_vertexPosition_projected : SV_POSITION,    out float3...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/MyAvatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Zishuai Zhang</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">35</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">5</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/zhangzs11" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:zhangzs2023@163.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Virtual-Destructors"><span class="toc-number">1.</span> <span class="toc-text">Virtual Destructors</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Conclusion"><span class="toc-number">2.</span> <span class="toc-text">Conclusion</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/01/22/CPP-LittleAndBigEndian/" title="CPP-Little Endian and Big Endian">CPP-Little Endian and Big Endian</a><time datetime="2025-01-23T03:33:28.734Z" title="Created 2025-01-22 20:33:28">2025-01-22</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/01/22/CPP-FunctionInlining/" title="CPP-Function Inlining">CPP-Function Inlining</a><time datetime="2025-01-22T23:23:37.134Z" title="Created 2025-01-22 16:23:37">2025-01-22</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/01/22/CPP-templates/" title="CPP-Templates">CPP-Templates</a><time datetime="2025-01-22T21:37:35.024Z" title="Created 2025-01-22 14:37:35">2025-01-22</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/01/22/CPP-1114Features/" title="CPP-Cpp11/14 Features">CPP-Cpp11/14 Features</a><time datetime="2025-01-22T19:42:13.088Z" title="Created 2025-01-22 12:42:13">2025-01-22</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/01/21/CPP-stackVSheap/" title="CPP-stack VS heap">CPP-stack VS heap</a><time datetime="2025-01-22T05:31:34.679Z" title="Created 2025-01-21 22:31:34">2025-01-21</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By Zishuai Zhang</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+      
+      const script = document.createElement('script')
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
