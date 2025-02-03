@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>CG-How to Write Fast Shaders | Canned Pixels</title><meta name="author" content="Zishuai Zhang,zhangzs2023@163.com"><meta name="copyright" content="Zishuai Zhang"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Intro12345float4 frag (Varyings input) : SV_Target&#123;    float arg &#x3D; 27 * length(input.uv - 0.5);    return float4(cos(arg), sin(arg), 0.5, 1);&#125; 1234float4 frag (Varyings input) : SV_Target&amp;#1">
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>CG-How to Write Fast Shaders | Canned Pixels</title><meta name="author" content="Zishuai Zhang,zhangzs2023@163.com"><meta name="copyright" content="Zishuai Zhang"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="Intro12345float4 frag (Varyings input) : SV_Target&#123;    float arg &#x3D; 27 * length(input.uv - 0.5);    return float4(cos(arg), sin(arg), 0.5, 1);&#125; 1234float4 frag (Varyings input) : SV_Target&amp;#1">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CG-How to Write Fast Shaders">
 <meta property="og:url" content="https://zhangzs11.github.io/2023/11/17/CG_HowWriteFastShader/index.html">
@@ -75,7 +75,7 @@
       const activateLightMode = () => {
         document.documentElement.setAttribute('data-theme', 'light')
         if (document.querySelector('meta[name="theme-color"]') !== null) {
-          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
         }
       }
 
